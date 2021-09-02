@@ -3,6 +3,7 @@ package com.eversonhs.to_dolist.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.eversonhs.to_dolist.databinding.ActivityMainBinding
 import com.eversonhs.to_dolist.datasource.TaskDataSource
@@ -49,7 +50,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateList() {
-        adapter.submitList(TaskDataSource.getTasks())
+        val tasks = TaskDataSource.getTasks()
+        binding.emptyView.emptyState.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
+
+        adapter.submitList(tasks)
     }
     companion object {
         private const val CREATE_NEW_TASK = 1000

@@ -10,4 +10,6 @@
     <string name="add_task_description">Nova Tarefa</string>
     <string name="edit_item_popup">Editar</string>
     <string name="delete_item_popup">Apagar</string>
+    <string name="empty_state_text">Ops! Você não possui tarefas ainda</string>
+    <string name="time_picker_hint">Hora</string>
 </resources>
