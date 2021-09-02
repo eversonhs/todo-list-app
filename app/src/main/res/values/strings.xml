@@ -7,5 +7,7 @@
     <string name="add_task_hint_date">Data</string>
     <string name="create_task">Criar Tarefa</string>
     <string name="cancel">Cancelar</string>
-    <string name="add_task_description">Add task</string>
+    <string name="add_task_description">Nova Tarefa</string>
+    <string name="edit_item_popup">Editar</string>
+    <string name="delete_item_popup">Apagar</string>
 </resources>
