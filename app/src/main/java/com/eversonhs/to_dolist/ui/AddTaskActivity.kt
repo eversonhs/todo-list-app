@@ -28,7 +28,6 @@ class AddTaskActivity: AppCompatActivity() {
                 binding.tilDate.text = it.date
                 binding.tilTime.text = it.time
             }
-
         }
     }
 
@@ -57,9 +56,9 @@ class AddTaskActivity: AppCompatActivity() {
                 .Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .build()
-            val minute = if(timePicker.minute in 0..9) "0${timePicker.minute}" else "${timePicker.minute}"
-            val hour = if(timePicker.hour in 0..9) "0${timePicker.hour}" else "${timePicker.hour}"
             timePicker.addOnPositiveButtonClickListener {
+                val minute = if(timePicker.minute in 0..9) "0${timePicker.minute}" else "${timePicker.minute}"
+                val hour = if(timePicker.hour in 0..9) "0${timePicker.hour}" else "${timePicker.hour}"
                 binding.tilTime.text = "$hour:$minute"
             }
             timePicker.show(supportFragmentManager, "TIME_PICKER_TAG")
