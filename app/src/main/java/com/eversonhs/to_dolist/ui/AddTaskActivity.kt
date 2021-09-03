@@ -26,6 +26,7 @@ class AddTaskActivity: AppCompatActivity() {
             val taskId = intent.getIntExtra(TASK_ID, 0)
             TaskDataSource.findById(taskId)?.let {
                 binding.tilTitle.text = it.title
+                binding.tilDescription.text = it.description
                 binding.tilDate.text = it.date
                 binding.tilTime.text = it.time
             }
