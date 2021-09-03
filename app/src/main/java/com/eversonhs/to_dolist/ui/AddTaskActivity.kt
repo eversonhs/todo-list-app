@@ -21,6 +21,7 @@ class AddTaskActivity: AppCompatActivity() {
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         insertListeners()
+
         if(intent.hasExtra(TASK_ID)) {
             val taskId = intent.getIntExtra(TASK_ID, 0)
             TaskDataSource.findById(taskId)?.let {
@@ -32,10 +33,17 @@ class AddTaskActivity: AppCompatActivity() {
     }
 
     private fun insertListeners() {
+        insertToolbarNavigationListener()
         insertDateInputListeners()
         insertTimeInputListeners()
         insertCreateTaskButtonListeners()
         insertCancelButtonListeners()
+    }
+
+    private fun insertToolbarNavigationListener() {
+        binding.materialToolbar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     private fun insertDateInputListeners() {

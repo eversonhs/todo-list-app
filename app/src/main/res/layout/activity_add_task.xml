@@ -66,7 +66,7 @@
         app:layout_constraintTop_toBottomOf="@id/til_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
