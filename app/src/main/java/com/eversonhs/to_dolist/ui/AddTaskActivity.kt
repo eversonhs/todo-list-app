@@ -3,32 +3,40 @@ package com.eversonhs.to_dolist.ui
 import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.eversonhs.to_dolist.application.TodoListApplication
+import com.eversonhs.to_dolist.database.TaskDatabase
 import com.eversonhs.to_dolist.databinding.ActivityAddTaskBinding
-import com.eversonhs.to_dolist.datasource.TaskDataSource
 import com.eversonhs.to_dolist.extensions.format
 import com.eversonhs.to_dolist.extensions.text
 import com.eversonhs.to_dolist.model.Task
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AddTaskActivity: AppCompatActivity() {
     private lateinit var binding: ActivityAddTaskBinding
+    private lateinit var database: TaskDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        database = (application as TodoListApplication).database
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         insertListeners()
 
         if(intent.hasExtra(TASK_ID)) {
             val taskId = intent.getIntExtra(TASK_ID, 0)
-            TaskDataSource.findById(taskId)?.let {
-                binding.tilTitle.text = it.title
-                binding.tilDescription.text = it.description
-                binding.tilDate.text = it.date
-                binding.tilTime.text = it.time
+            CoroutineScope(Dispatchers.Main).launch {
+                database.TaskDao().findById(taskId)?.let {
+                    binding.tilTitle.text = it.title
+                    binding.tilDescription.text = it.description
+                    binding.tilDate.text = it.date
+                    binding.tilTime.text = it.time
+                }
             }
         }
     }
@@ -76,14 +84,22 @@ class AddTaskActivity: AppCompatActivity() {
 
     private fun insertCreateTaskButtonListeners() {
         binding.btnCreateTask.setOnClickListener {
+            val taskId = intent.getIntExtra(TASK_ID, 0)
             val task = Task (
                 binding.tilTitle.text,
                 binding.tilDescription.text,
                 binding.tilTime.text,
                 binding.tilDate.text,
-                intent.getIntExtra(TASK_ID, 0)
+                taskId
             )
-            TaskDataSource.insertTask(task)
+            if(taskId == 0)
+                CoroutineScope(Dispatchers.Main).launch {
+                    database.TaskDao().insertTask(task)
+                }
+            else
+                CoroutineScope(Dispatchers.Main).launch {
+                    database.TaskDao().updateTask(task)
+                }
             setResult(Activity.RESULT_OK)
             finish()
         }
