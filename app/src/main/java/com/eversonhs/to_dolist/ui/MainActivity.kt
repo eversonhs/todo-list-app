@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.eversonhs.to_dolist.application.TodoListApplication
 import com.eversonhs.to_dolist.database.TaskDatabase
 import com.eversonhs.to_dolist.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,33 +19,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         database = (application as TodoListApplication).database
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.rvTasks.adapter = adapter
+
         setContentView(binding.root)
 
         insertListeners()
-        binding.rvTasks.adapter = adapter
-        CoroutineScope(Dispatchers.Main).launch {
-            updateList()
-        }
+        updateList()
     }
+
 
     private fun insertListeners() {
-        insertAddTaskButtonListeners()
-        insertAdapterListeners()
+        insertListenerAddTaskButton()
+        insertListenersAdapter()
     }
 
-    private fun insertAddTaskButtonListeners() {
+    private fun insertListenerAddTaskButton() {
         binding.btnAdd.setOnClickListener {
             startActivityForResult(Intent(this, AddTaskActivity::class.java), CREATE_NEW_TASK)
         }
     }
 
-    private fun insertAdapterListeners() {
+    private fun insertListenersAdapter() {
         adapter.deleteListener = {
             CoroutineScope(Dispatchers.Main).launch {
                 database.TaskDao().removeTask(it)
-                updateList()
             }
+            updateList()
         }
+
         adapter.editListener = {
             val intent = Intent(this, AddTaskActivity::class.java)
             intent.putExtra(AddTaskActivity.TASK_ID, it.id)
@@ -60,17 +59,18 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == CREATE_NEW_TASK && resultCode == Activity.RESULT_OK) {
-            CoroutineScope(Dispatchers.Main).launch {
-                updateList()
-            }
+            updateList()
         }
     }
 
-    private suspend fun updateList() {
-        val tasks = database.TaskDao().getTasks()
-        binding.emptyView.emptyState.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
+    private fun updateList() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val tasks = database.TaskDao().getTasks()
 
-        adapter.submitList(tasks)
+            binding.emptyView.emptyState.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
+
+            adapter.submitList(tasks)
+        }
     }
 
     companion object {

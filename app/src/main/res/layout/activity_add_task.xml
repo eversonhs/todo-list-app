@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        app:title="@string/title_add_task"
-        app:navigationIcon="@drawable/ic_navigate_before_24"
+        app:title="@string/create_task"
+        app:navigationIcon="@drawable/ic_navigate_before_36"
 
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -120,7 +120,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_create_task"
+        android:id="@+id/btn_apply"
         style="@style/Widget.MaterialComponents.Button"
 
         android:text="@string/create_task"
@@ -128,24 +128,10 @@
 
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintBottom_toTopOf="@id/btn_cancel"
-        />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_cancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-
-        android:text="@string/cancel"
-        android:textAllCaps="false"
-
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

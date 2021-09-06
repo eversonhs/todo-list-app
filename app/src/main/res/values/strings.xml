@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">To-do List</string>
     <string name="title_main_act">Tarefas</string>
-    <string name="title_add_task">Criar Tarefa</string>
     <string name="hint_add_task_title">Título</string>
     <string name="hint_add_task_description">Descrição</string>
     <string name="add_task_hint_date">Data</string>
     <string name="create_task">Criar Tarefa</string>
-    <string name="cancel">Cancelar</string>
+    <string name="edit_task">Editar Tarefa</string>
     <string name="add_task_description">Nova Tarefa</string>
     <string name="edit_item_popup">Editar</string>
     <string name="delete_item_popup">Apagar</string>
