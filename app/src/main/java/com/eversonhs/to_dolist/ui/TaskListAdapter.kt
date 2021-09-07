@@ -1,6 +1,7 @@
 package com.eversonhs.to_dolist.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -26,17 +27,25 @@ class TaskListAdapter: ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCal
         holder.bind(getItem(position))
     }
 
-    inner class TaskViewHolder(
-        private val binding: ItemTaskBinding
-        ): RecyclerView.ViewHolder(binding.root) {
+    inner class TaskViewHolder(private val binding: ItemTaskBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(item: Task) {
-                binding.tvTitle.text = item.title
-                binding.tvDate.text = "${item.date} ${item.time}"
-                binding.ivMore.setOnClickListener {
-                    showPopUp(item)
-                }
+        fun bind(item: Task) {
+            binding.root.setOnClickListener {
+                toggleDescription()
             }
+            binding.tvTitle.text = item.title
+            binding.tvDescription.text = item.description
+            binding.tvDate.text = "${item.date} ${item.time}"
+            binding.ivMore.setOnClickListener {
+                showPopUp(item)
+            }
+        }
+
+        private fun toggleDescription() {
+            val visibility = binding.tvDescription.visibility
+            binding.tvDescription.visibility = if(visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
 
         private fun showPopUp(item: Task) {
             val ivMore = binding.ivMore
