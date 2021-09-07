@@ -24,7 +24,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         insertListeners()
-        updateList()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            updateList()
+        }
     }
 
 
@@ -43,15 +46,14 @@ class MainActivity : AppCompatActivity() {
         adapter.deleteListener = {
             CoroutineScope(Dispatchers.Main).launch {
                 database.TaskDao().removeTask(it)
+                updateList()
             }
-            updateList()
         }
 
         adapter.editListener = {
             val intent = Intent(this, AddTaskActivity::class.java)
             intent.putExtra(AddTaskActivity.TASK_ID, it.id)
             startActivityForResult(intent, CREATE_NEW_TASK)
-
         }
     }
 
@@ -59,18 +61,18 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == CREATE_NEW_TASK && resultCode == Activity.RESULT_OK) {
-            updateList()
+            CoroutineScope(Dispatchers.Main).launch {
+                updateList()
+            }
         }
     }
 
-    private fun updateList() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val tasks = database.TaskDao().getTasks()
+    private suspend fun updateList() {
+        val tasks = database.TaskDao().getTasks()
 
-            binding.emptyView.emptyState.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
+        binding.emptyView.emptyState.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
 
-            adapter.submitList(tasks)
-        }
+        adapter.submitList(tasks)
     }
 
     companion object {
